@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   test_django_job:
-    uses: Aleksbogdanov12/django-k8s-web1/django/.github/workflows/main.yml@main
+    uses: Aleksbogdanov12/django-k8s-web1/.github/workflows/main.yml@main
   docker-build:
     runs-on: ubuntu-latest # operating system your code will run on
     needs: test_django_job
