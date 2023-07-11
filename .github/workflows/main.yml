@@ -1,7 +1,13 @@
 name: Deploy to Digital Ocean
 
-on: [push]
-
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    
 jobs:
   build:
     runs-on: ubuntu-latest # operating system your code will run on

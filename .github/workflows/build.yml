@@ -1,6 +1,12 @@
 name: Build Docker Container and Push to DO Registry
 
-on: [push]
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   test_django_job:
