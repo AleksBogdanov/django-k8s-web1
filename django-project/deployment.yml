@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: app
+
+        labels:
+          app: app
+    spec:
+      containers:
+        - name: app
+          image: mynewuser123456789/django-k8s:latest
+         envFrom:
+            - configMapRef:
+                name: app-configmap
+            - secretRef:
+                name: app-secret
