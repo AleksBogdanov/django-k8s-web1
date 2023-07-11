@@ -16,5 +16,4 @@ jobs:
     runs-on: ubuntu-latest # operating system your code will run on
     steps:
       - uses: actions/checkout@v3
-      - name: Build Docker file
       - run: pwd
