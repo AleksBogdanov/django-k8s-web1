@@ -45,13 +45,3 @@ jobs:
         run: |
           cd /home/runner/work/django-k8s-web1/django-k8s-web1/web
           python manage.py test     
-
-  build_image:
-    runs-on: ubuntu-latest # operating system your code will run on
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          cd /home/runner/work/django-k8s-web1/django-k8s-web1/web
-          docker build -t registry.digitalocean.com/cfe-django-k8s/web:v1 -f Dockerfile .
-          docker login registry.digitalocean.com
-          ls -la
