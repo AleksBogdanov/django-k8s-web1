@@ -1,6 +1,6 @@
 name: Deploy to Digital Ocean
 
-on: [push, pull]
+on: [push]
 
 jobs:
   test_project:
