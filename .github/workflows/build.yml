@@ -9,4 +9,28 @@ jobs:
     runs-on: ubuntu-latest # operating system your code will run on
     needs: test_django_job
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_API_KEY }}
+      - name: Login to DO Registry
+        run: doctl registry login --expiry-seconds 1200
+      - name: Build Container image
+        working-directory: ./web
+        run: |
+          docker build -f Dockerfile \
+            -t registry.digitalocean.com/cfe-django-k8s/web:latest \
+            -t registry.digitalocean.com/cfe-django-k8s/web:${GITHUB_SHA::7} \
+            .
+      - name: Push image
+        run: |
+          docker push registry.digitalocean.com/cfe-django-k8s/web --all-tags
+          
+
+
+
+
+
+
