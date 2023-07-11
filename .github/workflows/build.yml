@@ -14,6 +14,8 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest # operating system your code will run on
     needs: [test_django_job]
+    env:
+      CLUSTER_NAME: django-k8s
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -33,9 +35,19 @@ jobs:
       - name: Push image
         run: |
           docker push registry.digitalocean.com/cfe-django-k8s/web --all-tags
-
-
-
+      - name: K8s cluster kubeconfig file short-lived creds
+        run: |
+          doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.CLUSTER_NAME }}
+      - name: Update Deployment image
+        run: |
+          kubectl set image deployment/django-k8s-web-deployment django-k8s-web=registry.digitalocean.com/cfe-django-k8s/web:${GITHUB_SHA::7}
+      - name: Wait for Rollout to finish
+        run: |
+          kubectl rollout status deployment/django-k8s-web-deployment
+      - name: Migrate Database
+        run: |
+          export SINGLE_RUNNING_POD=$(kubectl get pod -l app=django-k8s-web-deployment -o jsonpath="{.items[0].metadata.name}")
+          kubectl exec -it SINGLE_RUNNING_POD -- bash /app/migrate.sh
 
 
 
