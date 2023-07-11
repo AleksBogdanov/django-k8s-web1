@@ -5,6 +5,31 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest # operating system your code will run on
+    defaults:
+      run:
+        working-directory: ./web
+    env:
+      POSTGRES_DB: auth
+      POSTGRES_PASSWORD: thifgdsj325fds
+      POSTGRES_USER: aleks
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+    services:
+      postgres_main:
+        image: postgres:15
+        env:
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
